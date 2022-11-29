@@ -6,7 +6,8 @@ import io
 import requests
 import json
 import datetime
-
+# from datetime import *
+from datetime import datetime as dtt
 import urllib.request
 
 app = Flask(__name__)
@@ -48,10 +49,7 @@ def upload():
             customer_country = str(df1['Customer Country'][i])
             contact_name = str(df1['Contact Name'][i])
             contact_number = str(df1['Contact Number'][i])
-            customer_slot_start = str(df1['Customer Slot Start'][i])
 
-            print("value of start is ",customer_slot_start)
-            customer_slot_end = str(df1['Customer Slot End'][i])
             transaction_duration = int(df1['Customer Transaction Duration (minutes)'][i])
             volume = str(df1['Volume'][i])
             volume_unit = str(df1['Volume Unit'][i])
@@ -64,7 +62,9 @@ def upload():
             what3words = str(df1['what3words'][i])
             date = str(datetime.datetime.strptime(str(df1['Customer Execution Date'][i]), "%d-%m-%Y").strftime("%Y-%m-%d"))
             order_date = str(datetime.datetime.strptime(str(df1['Order Date'][i]), "%d-%m-%Y").strftime("%Y-%m-%d"))
-
+            customer_slot_start = order_date+'T'+str(dtt.strptime(str(df1['Customer Slot Start'][i]), '%I:%M %p').strftime('%H:%M:%S'))+'.000+0000'
+            customer_slot_end = order_date+'T'+str(dtt.strptime(str(df1['Customer Slot End'][i]), '%I:%M %p').strftime('%H:%M:%S'))+'.000+0000'
+            
             print(order_id)
             print(types)
             print(team_id)
@@ -102,15 +102,15 @@ def upload():
                     "number": contact_number
                 },
                 "slot": {
-                    "start": "2022-11-30T03:00:00.000+0000",
-                    "end": "2022-11-30T06:30:00.000+0000"
+                    "start": customer_slot_start,
+                    "end": customer_slot_end
                 },
                 "amountTransaction": {
                 "amount": {
-                "amount": 0,
-                "currency": "INR"
+                "amount": amount,
+                "currency": currency
                 },
-                "exchangeType": "NONE"
+                "exchangeType": payment_type
                   },
                 "transactionDuration": transaction_duration,
                 "volume": {
@@ -123,7 +123,7 @@ def upload():
                 },
                     "date": date,
                     "orderDate": order_date,
-                    "what3words": "///mushroom.veto.foot"
+                    "what3words": what3words
             })
         
         headers = {
