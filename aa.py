@@ -8,6 +8,7 @@ import json
 import datetime
 # from datetime import *
 from datetime import datetime as dtt
+from datetime import date as dat
 import urllib.request
 
 app = Flask(__name__)
@@ -62,8 +63,10 @@ def upload():
             what3words = str(df1['what3words'][i])
             date = str(datetime.datetime.strptime(str(df1['Customer Execution Date'][i]), "%d-%m-%Y").strftime("%Y-%m-%d"))
             order_date = str(datetime.datetime.strptime(str(df1['Order Date'][i]), "%d-%m-%Y").strftime("%Y-%m-%d"))
-            customer_slot_start = order_date+'T'+str(dtt.strptime(str(df1['Customer Slot Start'][i]), '%I:%M %p').strftime('%H:%M:%S'))+'.000+0000'
-            customer_slot_end = order_date+'T'+str(dtt.strptime(str(df1['Customer Slot End'][i]), '%I:%M %p').strftime('%H:%M:%S'))+'.000+0000'
+            # customer_slot_start = order_date+'T'+str(dtt.strptime(str(df1['Customer Slot Start'][i]), '%I:%M %p').strftime('%H:%M:%S'))+'.000+0000'
+            # customer_slot_end = order_date+'T'+str(dtt.strptime(str(df1['Customer Slot End'][i]), '%I:%M %p').strftime('%H:%M:%S'))+'.000+0000'
+            customer_slot_start = str(dat.today())+'T'+str(dtt.strptime(str(df1['Customer Slot Start'][i]), '%I:%M %p').strftime('%H:%M:%S'))+'.000+0000'
+            customer_slot_end = str(dat.today())+'T'+str(dtt.strptime(str(df1['Customer Slot End'][i]), '%I:%M %p').strftime('%H:%M:%S'))+'.000+0000'
             
             print(order_id)
             print(types)
